@@ -1,21 +1,18 @@
 import type { Metadata } from "next";
-import { Cormorant_Garamond, Manrope } from "next/font/google";
+import { Inter } from "next/font/google";
 import "./globals.css";
 
-const manrope = Manrope({
-  variable: "--font-manrope",
+const inter = Inter({
+  variable: "--font-inter",
   subsets: ["latin"],
-});
-
-const cormorantGaramond = Cormorant_Garamond({
-  variable: "--font-cormorant-garamond",
-  subsets: ["latin"],
-  weight: ["400", "500", "600", "700"],
+  display: "swap",
 });
 
 export const metadata: Metadata = {
-  title: "NGO Management Systems",
-  description: "A design-aligned website for an NGO management systems organization.",
+  title: "NGOSystems — Advancing Global NGO Impact",
+  description:
+    "We bridge the gap between world-class software engineering and boots-on-the-ground social change. Professional management systems designed for organizations that change the world.",
+  keywords: "NGO management, nonprofit software, impact analytics, CRM for NGOs",
 };
 
 export default function RootLayout({
@@ -24,11 +21,14 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html
-      lang="en"
-      className={`${manrope.variable} ${cormorantGaramond.variable} h-full scroll-smooth antialiased`}
-    >
-      <body className="min-h-full bg-[var(--background)] text-[var(--foreground)] antialiased">
+    <html lang="en" className={`${inter.variable} h-full scroll-smooth`}>
+      <head>
+        <link
+          rel="stylesheet"
+          href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200"
+        />
+      </head>
+      <body className="min-h-full bg-[var(--bg)] text-[var(--foreground)] antialiased">
         {children}
       </body>
     </html>

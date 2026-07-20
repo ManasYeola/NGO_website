@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 
 export type Testimonial = {
@@ -5,143 +6,229 @@ export type Testimonial = {
   name: string;
   title: string;
   organization: string;
+  initials: string;
+  hasPhoto?: boolean;
 };
 
 export const testimonials: Testimonial[] = [
   {
     quote:
-      "The platform made it much easier for our field team to explain programs, share impact, and keep the story consistent across every touchpoint.",
-    name: "Anita Rao",
-    title: "Programs Director",
-    organization: "Bright Futures Trust",
+      "The efficiency gains we've seen since implementing NGOSystems have allowed our field teams to spend 40% more time on direct community engagement. It's not just software; it's a mission multiplier.",
+    name: "Sarah Jenkins",
+    title: "Regional Director",
+    organization: "Global Health Initiative",
+    initials: "SJ",
+    hasPhoto: true,
   },
   {
     quote:
-      "We needed a website that felt warm without losing clarity. The structure here is exactly what we were missing.",
-    name: "Daniel Mensah",
-    title: "Founder",
-    organization: "Community Lift Network",
+      "Finally, a management system that understands the complexities of international donor reporting while remaining accessible for local staff.",
+    name: "Marcus Kwesi",
+    title: "Operations Lead",
+    organization: "Water Foundation",
+    initials: "MK",
   },
   {
     quote:
-      "The design balances credibility and empathy. It gives us a strong front door for donors and partners.",
-    name: "Sara Iqbal",
-    title: "Partnership Lead",
-    organization: "Roots and Reach Initiative",
-  },
-  {
-    quote:
-      "We can finally show our work in a way that feels organized, modern, and simple to maintain.",
-    name: "Michael Chen",
-    title: "Operations Manager",
-    organization: "Open Hands Collective",
-  },
-  {
-    quote:
-      "The layout gives our testimonials real presence. Nothing feels cramped, and every card reads clearly on mobile.",
-    name: "Priya Nair",
+      "The transparency this platform provides to our partners has revolutionized our fundraising efforts. Trust is our currency, and NGOSystems helps us bank it.",
+    name: "David Aris",
     title: "Executive Director",
-    organization: "Neighbor Works Foundation",
+    organization: "Education First",
+    initials: "DA",
   },
   {
     quote:
-      "This is the kind of presentation that makes an organization look ready for scale without feeling corporate.",
-    name: "Omar Ali",
-    title: "Board Advisor",
-    organization: "Impact for All",
+      "Their support team is incredible. They don't just solve tickets; they help us strategize our data workflow.",
+    name: "Elena Lopez",
+    title: "Program Manager",
+    organization: "Project Green",
+    initials: "EL",
+  },
+  {
+    quote:
+      "The transition was seamless. We migrated years of data in just one weekend. Highly recommended for growing non-profits.",
+    name: "Anita Rao",
+    title: "Chief of Operations",
+    organization: "Children's Hope",
+    initials: "AR",
+  },
+  {
+    quote:
+      "NGOSystems gave us real-time visibility into our programs. Now we can make data-driven decisions that genuinely move the needle.",
+    name: "James Osei",
+    title: "Country Director",
+    organization: "Global Bridges",
+    initials: "JO",
   },
 ];
 
+const statsRow = [
+  { value: "500+", label: "NGOs Empowered" },
+  { value: "1M+", label: "Lives Touched" },
+  { value: "12+", label: "Countries Active" },
+  { value: "98%", label: "Satisfaction Rate" },
+];
+
+/* ─── Hero ───────────────────────────────────────────────────────────── */
 export function TestimonialsHero() {
   return (
-    <section className="space-y-6">
-      <div className="inline-flex items-center gap-2 rounded-full border border-[var(--border)] bg-white/70 px-4 py-2 text-xs font-semibold uppercase tracking-[0.28em] text-[var(--muted)] shadow-sm backdrop-blur">
-        Real voices from partners and supporters
-      </div>
-      <div className="grid gap-6 lg:grid-cols-[1.05fr_0.95fr] lg:items-end">
-        <div className="space-y-4">
-          <p className="text-sm font-semibold uppercase tracking-[0.24em] text-[var(--brand)]">
-            Testimonials
-          </p>
-          <h1 className="font-serif text-5xl font-bold leading-[0.95] text-[var(--foreground)] sm:text-6xl lg:text-7xl">
-            Stories that build trust before the first meeting.
-          </h1>
+    <section className="bg-white pt-16 pb-12">
+      <div className="mx-auto max-w-7xl px-6 lg:px-10">
+        <div className="inline-flex items-center gap-2 rounded-full border border-[var(--border)] bg-blue-50 px-4 py-1.5 text-xs font-semibold uppercase tracking-widest text-[var(--brand)] mb-6">
+          Real voices from partners and supporters
         </div>
-
-        <p className="max-w-2xl text-lg leading-8 text-[var(--muted)] sm:text-xl">
-          This page turns the PRD’s testimonial requirement into a dedicated route with a responsive
-          card grid, strong visual hierarchy, and a clear call to contact the organization.
-        </p>
+        <div className="grid gap-6 lg:grid-cols-2 lg:items-end">
+          <div>
+            <p className="text-xs font-semibold uppercase tracking-widest text-[var(--brand)]">Testimonials</p>
+            <h1 className="mt-3 text-5xl font-bold leading-tight text-[var(--foreground)] sm:text-6xl lg:text-7xl">
+              Stories that build trust before the first meeting.
+            </h1>
+          </div>
+          <p className="text-lg leading-8 text-[var(--muted)]">
+            Join hundreds of forward-thinking organizations that have transformed their operations.
+            Hear directly from the people doing the work on the ground.
+          </p>
+        </div>
       </div>
     </section>
   );
 }
 
+/* ─── Stats Row ──────────────────────────────────────────────────────── */
+export function TestimonialsStats() {
+  return (
+    <section className="bg-[var(--bg-alt)] py-10">
+      <div className="mx-auto max-w-7xl px-6 lg:px-10">
+        <div className="grid grid-cols-2 gap-6 sm:grid-cols-4">
+          {statsRow.map((stat, i) => (
+            <div
+              key={stat.label}
+              className={`text-center ${i < statsRow.length - 1 ? "sm:border-r sm:border-[var(--border)]" : ""}`}
+            >
+              <div className="text-3xl font-bold text-[var(--brand)]">{stat.value}</div>
+              <div className="mt-1 text-xs font-semibold uppercase tracking-widest text-[var(--muted)]">{stat.label}</div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+/* ─── Featured Testimonial ───────────────────────────────────────────── */
+export function FeaturedTestimonial() {
+  const t = testimonials[0];
+  return (
+    <section className="bg-white py-16">
+      <div className="mx-auto max-w-7xl px-6 lg:px-10">
+        <div className="relative overflow-hidden rounded-3xl bg-[var(--bg-alt)] p-8 sm:p-12">
+          {/* Watermark */}
+          <span className="material-symbols-outlined pointer-events-none absolute -right-6 -top-6 text-[160px] text-[var(--brand)] opacity-[0.05] select-none">
+            format_quote
+          </span>
+          <div className="flex items-center gap-2 mb-6">
+            {Array.from({ length: 5 }).map((_, i) => (
+              <span key={i} className="material-symbols-outlined text-[20px] text-amber-400" style={{ fontVariationSettings: "'FILL' 1" }}>
+                star
+              </span>
+            ))}
+            <span className="ml-2 text-xs font-medium text-[var(--muted)]">starstarstarstarstar</span>
+          </div>
+          <blockquote className="max-w-4xl text-2xl font-semibold italic leading-9 text-[var(--foreground)] sm:text-3xl">
+            &ldquo;{t.quote}&rdquo;
+          </blockquote>
+          <footer className="mt-8 flex items-center gap-4">
+            <Image
+              src="/sarah_jenkins.png"
+              alt="Sarah Jenkins"
+              width={60}
+              height={60}
+              className="rounded-full object-cover"
+            />
+            <div>
+              <div className="font-bold text-[var(--foreground)]">{t.name}</div>
+              <div className="text-sm text-[var(--muted)]">{t.title}, {t.organization}</div>
+            </div>
+          </footer>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+/* ─── Testimonials Grid ──────────────────────────────────────────────── */
 export function TestimonialsGrid() {
   return (
-    <section className="grid gap-5 sm:grid-cols-2 xl:grid-cols-3">
-      {testimonials.map((testimonial) => (
-        <article
-          key={`${testimonial.name}-${testimonial.organization}`}
-          className="glass-card flex h-full flex-col rounded-[1.75rem] p-6 transition-transform duration-300 hover:-translate-y-1"
-        >
-          <div className="flex items-center gap-3">
-            <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-[rgba(14,111,92,0.12)] font-serif text-2xl font-bold text-[var(--brand)]">
-              &ldquo;
-            </div>
-            <div>
-              <div className="text-sm font-semibold uppercase tracking-[0.18em] text-[var(--foreground)]">
-                {testimonial.name}
-              </div>
-              <div className="mt-1 text-xs uppercase tracking-[0.16em] text-[var(--muted)]">
-                {testimonial.title}
-              </div>
-            </div>
-          </div>
+    <section className="bg-[var(--bg-alt)] py-16">
+      <div className="mx-auto max-w-7xl px-6 lg:px-10">
+        <div className="mb-8">
+          <p className="text-xs font-semibold uppercase tracking-widest text-[var(--brand)]">Card Grid</p>
+          <h2 className="mt-2 text-3xl font-bold text-[var(--foreground)] sm:text-4xl">
+            Consistent card sizing keeps the page balanced even when quotes vary.
+          </h2>
+        </div>
+        <div className="grid gap-5 sm:grid-cols-2 xl:grid-cols-3">
+          {testimonials.slice(1).map((t) => (
+            <article
+              key={`${t.name}-${t.organization}`}
+              className="relative flex h-full flex-col overflow-hidden rounded-2xl bg-white p-6 shadow-sm transition-shadow hover:shadow-md"
+            >
+              {/* Watermark */}
+              <span className="material-symbols-outlined pointer-events-none absolute -right-2 -top-2 text-[80px] text-[var(--brand)] opacity-[0.06] select-none">
+                format_quote
+              </span>
 
-          <blockquote className="mt-5 flex-1 text-base leading-8 text-[var(--muted)]">
-            {testimonial.quote}
-          </blockquote>
+              <p className="flex-1 text-sm leading-7 text-[var(--muted)] italic">&ldquo;{t.quote}&rdquo;</p>
 
-          <div className="mt-6 border-t border-[var(--border)] pt-4 text-sm font-medium text-[var(--foreground)]">
-            {testimonial.organization}
-          </div>
-        </article>
-      ))}
+              <div className="mt-6 flex items-center gap-3 border-t border-[var(--border)] pt-5">
+                <div
+                  className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-[var(--brand)] text-xs font-bold text-white"
+                >
+                  {t.initials}
+                </div>
+                <div>
+                  <div className="text-sm font-semibold text-[var(--foreground)]">{t.name}</div>
+                  <div className="text-xs text-[var(--muted)] italic">{t.title}, {t.organization}</div>
+                </div>
+              </div>
+            </article>
+          ))}
+        </div>
+      </div>
     </section>
   );
 }
 
+/* ─── CTA ────────────────────────────────────────────────────────────── */
 export function TestimonialsCTA() {
   return (
-    <section className="glass-card rounded-[2rem] px-6 py-8 sm:px-8 sm:py-10">
-      <div className="grid gap-6 lg:grid-cols-[1.15fr_0.85fr] lg:items-center">
-        <div className="space-y-3">
-          <p className="text-sm font-semibold uppercase tracking-[0.24em] text-[var(--brand)]">
-            Next step
-          </p>
-          <h2 className="font-serif text-3xl font-bold text-[var(--foreground)] sm:text-4xl">
-            Ready to turn a few quotes into a stronger story?
+    <section className="relative overflow-hidden bg-white py-20">
+      <div className="pointer-events-none absolute inset-0 bg-gradient-to-r from-teal-50/60 to-blue-50/60" />
+      <div className="relative mx-auto max-w-7xl px-6 lg:px-10">
+        <div className="text-center">
+          <h2 className="text-3xl font-bold text-[var(--foreground)] sm:text-5xl">
+            Want to be our next success story?
           </h2>
-          <p className="max-w-2xl text-base leading-7 text-[var(--muted)]">
-            We can next wire the gallery, contact form, and timeline pages so the full site matches
-            the PRD section-by-section.
+          <p className="mx-auto mt-5 max-w-2xl text-lg text-[var(--muted)]">
+            Join hundreds of organizations transforming the world. Let&apos;s discuss your mission
+            and how we can support it.
           </p>
-        </div>
-
-        <div className="flex flex-col gap-4 sm:flex-row lg:justify-end">
-          <Link
-            href="/"
-            className="inline-flex items-center justify-center rounded-full border border-[var(--border)] bg-white/80 px-6 py-3.5 text-sm font-semibold text-[var(--foreground)] shadow-sm transition-transform duration-300 hover:-translate-y-0.5 hover:bg-white"
-          >
-            Back home
-          </Link>
-          <Link
-            href="/#contact"
-            className="inline-flex items-center justify-center rounded-full bg-[var(--brand)] px-6 py-3.5 text-sm font-semibold text-white shadow-lg shadow-emerald-900/15 transition-transform duration-300 hover:-translate-y-0.5 hover:bg-[var(--brand-strong)]"
-          >
-            Contact us
-          </Link>
+          <div className="mt-8 flex flex-col items-center gap-4 sm:flex-row sm:justify-center">
+            <Link
+              id="testimonials-contact-cta"
+              href="/contact"
+              className="inline-flex items-center rounded-lg bg-[var(--brand)] px-8 py-3.5 text-sm font-semibold text-white transition-all duration-150 hover:bg-[var(--brand-dark)] hover:-translate-y-0.5"
+            >
+              Contact Us
+            </Link>
+            <Link
+              id="testimonials-demo-cta"
+              href="/contact"
+              className="inline-flex items-center rounded-lg border border-[var(--border-medium)] bg-white px-8 py-3.5 text-sm font-semibold text-[var(--foreground)] transition-all duration-150 hover:bg-gray-50 hover:-translate-y-0.5"
+            >
+              Request a Demo
+            </Link>
+          </div>
         </div>
       </div>
     </section>

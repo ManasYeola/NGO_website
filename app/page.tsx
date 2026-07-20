@@ -1,23 +1,26 @@
+import { Navbar, Footer } from "./components/shared";
 import {
-  HomeFooter,
-  HomeHeader,
-  HighlightsSection,
   HeroSection,
-  SocialProofSection,
+  AboutSection,
+  StatsBar,
+  ServicesSection,
+  TestimonialsPreview,
+  CtaBand,
 } from "./components/home-sections";
 
 export default function Home() {
   return (
-    <div id="home" className="page-shell min-h-screen">
-      <HomeHeader />
-
-      <main className="relative mx-auto flex w-full max-w-7xl flex-col gap-20 px-5 py-10 sm:px-8 lg:px-10 lg:py-14">
+    <div id="home" className="min-h-screen">
+      <Navbar />
+      <main>
         <HeroSection />
-        <HighlightsSection />
-        <SocialProofSection />
+        <AboutSection />
+        <StatsBar />
+        <ServicesSection />
+        <TestimonialsPreview />
+        <CtaBand />
       </main>
-
-      <HomeFooter />
+      <Footer />
     </div>
   );
 }
