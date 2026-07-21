@@ -64,29 +64,26 @@ export const testimonials: Testimonial[] = [
 
 const statsRow = [
   { value: "500+", label: "NGOs Empowered" },
-  { value: "1M+", label: "Lives Touched" },
-  { value: "12+", label: "Countries Active" },
+  { value: "45M+", label: "Lives Touched" },
+  { value: "120+", label: "Countries Active" },
   { value: "98%", label: "Satisfaction Rate" },
 ];
 
 /* ─── Hero ───────────────────────────────────────────────────────────── */
 export function TestimonialsHero() {
   return (
-    <section className="bg-white pt-16 pb-12">
-      <div className="mx-auto max-w-7xl px-6 lg:px-10">
-        <div className="inline-flex items-center gap-2 rounded-full border border-[var(--border)] bg-blue-50 px-4 py-1.5 text-xs font-semibold uppercase tracking-widest text-[var(--brand)] mb-6">
-          Real voices from partners and supporters
-        </div>
-        <div className="grid gap-6 lg:grid-cols-2 lg:items-end">
-          <div>
-            <p className="text-xs font-semibold uppercase tracking-widest text-[var(--brand)]">Testimonials</p>
-            <h1 className="mt-3 text-5xl font-bold leading-tight text-[var(--foreground)] sm:text-6xl lg:text-7xl">
-              Stories that build trust before the first meeting.
-            </h1>
-          </div>
-          <p className="text-lg leading-8 text-[var(--muted)]">
-            Join hundreds of forward-thinking organizations that have transformed their operations.
-            Hear directly from the people doing the work on the ground.
+    <section className="bg-[var(--bg)] pt-12 pb-12 lg:pt-16 lg:pb-14">
+      <div className="mx-auto max-w-5xl px-6 lg:px-10">
+        <div className="text-center">
+          <p className="text-[11px] font-semibold uppercase tracking-[0.28em] text-[var(--brand)]">
+            Real voices from partners and supporters
+          </p>
+          <h1 className="mt-4 text-[clamp(2.3rem,4.2vw,4.1rem)] font-extrabold leading-[0.98] tracking-[-0.05em] text-[var(--foreground)]">
+            What People Say About Us
+          </h1>
+          <p className="mx-auto mt-5 max-w-2xl text-[0.98rem] leading-7 text-[var(--muted)] sm:text-[1.02rem]">
+            Discover how organizations worldwide are scaling their impact and streamlining
+            operations with NGOSystems.
           </p>
         </div>
       </div>
@@ -97,16 +94,20 @@ export function TestimonialsHero() {
 /* ─── Stats Row ──────────────────────────────────────────────────────── */
 export function TestimonialsStats() {
   return (
-    <section className="bg-[var(--bg-alt)] py-10">
-      <div className="mx-auto max-w-7xl px-6 lg:px-10">
-        <div className="grid grid-cols-2 gap-6 sm:grid-cols-4">
-          {statsRow.map((stat, i) => (
+    <section className="bg-[var(--bg)] py-6 lg:py-8">
+      <div className="mx-auto max-w-5xl px-6 lg:px-10">
+        <div className="grid grid-cols-2 gap-4 sm:grid-cols-4">
+          {statsRow.map((stat) => (
             <div
               key={stat.label}
-              className={`text-center ${i < statsRow.length - 1 ? "sm:border-r sm:border-[var(--border)]" : ""}`}
+              className="rounded-2xl border border-black/5 bg-white px-4 py-6 text-center shadow-sm"
             >
-              <div className="text-3xl font-bold text-[var(--brand)]">{stat.value}</div>
-              <div className="mt-1 text-xs font-semibold uppercase tracking-widest text-[var(--muted)]">{stat.label}</div>
+              <div className="text-[1.7rem] font-bold leading-none text-[var(--brand)] sm:text-[2rem]">
+                {stat.value}
+              </div>
+              <div className="mt-1 text-[11px] font-semibold uppercase tracking-[0.22em] text-[var(--muted)]">
+                {stat.label}
+              </div>
             </div>
           ))}
         </div>
@@ -119,38 +120,35 @@ export function TestimonialsStats() {
 export function FeaturedTestimonial() {
   const t = testimonials[0];
   return (
-    <section className="bg-white py-16">
-      <div className="mx-auto max-w-7xl px-6 lg:px-10">
-        <div className="relative overflow-hidden rounded-3xl bg-[var(--bg-alt)] p-8 sm:p-12">
-          {/* Watermark */}
-          <span className="material-symbols-outlined pointer-events-none absolute -right-6 -top-6 text-[160px] text-[var(--brand)] opacity-[0.05] select-none">
-            format_quote
-          </span>
-          <div className="flex items-center gap-2 mb-6">
+    <section className="bg-[var(--bg)] py-10 lg:py-12">
+      <div className="mx-auto max-w-5xl px-6 lg:px-10">
+        <article className="rounded-3xl border border-black/5 bg-[#fffdf4] p-6 shadow-sm sm:p-8 lg:p-10">
+          <div className="flex items-center gap-1 text-[#46d3c4]">
             {Array.from({ length: 5 }).map((_, i) => (
-              <span key={i} className="material-symbols-outlined text-[20px] text-amber-400" style={{ fontVariationSettings: "'FILL' 1" }}>
+              <span key={i} className="material-symbols-outlined text-[18px]" style={{ fontVariationSettings: "'FILL' 1" }}>
                 star
               </span>
             ))}
-            <span className="ml-2 text-xs font-medium text-[var(--muted)]">starstarstarstarstar</span>
           </div>
-          <blockquote className="max-w-4xl text-2xl font-semibold italic leading-9 text-[var(--foreground)] sm:text-3xl">
+          <blockquote className="mt-5 max-w-4xl text-[1.3rem] font-semibold italic leading-[1.38] text-[var(--foreground)] sm:text-[1.45rem] lg:text-[1.65rem]">
             &ldquo;{t.quote}&rdquo;
           </blockquote>
-          <footer className="mt-8 flex items-center gap-4">
+          <footer className="mt-8 flex items-center gap-4 border-t border-black/5 pt-6">
             <Image
               src="/sarah_jenkins.png"
               alt="Sarah Jenkins"
-              width={60}
-              height={60}
-              className="rounded-full object-cover"
+              width={54}
+              height={54}
+              className="h-14 w-14 rounded-full object-cover"
             />
             <div>
-              <div className="font-bold text-[var(--foreground)]">{t.name}</div>
-              <div className="text-sm text-[var(--muted)]">{t.title}, {t.organization}</div>
+              <div className="text-[1.05rem] font-semibold text-[var(--foreground)]">{t.name}</div>
+              <div className="text-sm text-[var(--muted)]">
+                {t.title}, {t.organization}
+              </div>
             </div>
           </footer>
-        </div>
+        </article>
       </div>
     </section>
   );
@@ -159,36 +157,29 @@ export function FeaturedTestimonial() {
 /* ─── Testimonials Grid ──────────────────────────────────────────────── */
 export function TestimonialsGrid() {
   return (
-    <section className="bg-[var(--bg-alt)] py-16">
-      <div className="mx-auto max-w-7xl px-6 lg:px-10">
-        <div className="mb-8">
-          <p className="text-xs font-semibold uppercase tracking-widest text-[var(--brand)]">Card Grid</p>
-          <h2 className="mt-2 text-3xl font-bold text-[var(--foreground)] sm:text-4xl">
-            Consistent card sizing keeps the page balanced even when quotes vary.
-          </h2>
-        </div>
-        <div className="grid gap-5 sm:grid-cols-2 xl:grid-cols-3">
-          {testimonials.slice(1).map((t) => (
+    <section className="bg-[var(--bg)] py-12 lg:py-14">
+      <div className="mx-auto max-w-5xl px-6 lg:px-10">
+        <div className="grid gap-6 md:grid-cols-3">
+          {testimonials.slice(1, 4).map((t) => (
             <article
               key={`${t.name}-${t.organization}`}
-              className="relative flex h-full flex-col overflow-hidden rounded-2xl bg-white p-6 shadow-sm transition-shadow hover:shadow-md"
+              className={`relative flex h-full flex-col overflow-hidden rounded-2xl border border-black/5 p-6 shadow-sm transition-shadow hover:shadow-md ${t.name === "Elena Lopez" ? "bg-[#fffdf4]" : "bg-white"}`}
             >
-              {/* Watermark */}
-              <span className="material-symbols-outlined pointer-events-none absolute -right-2 -top-2 text-[80px] text-[var(--brand)] opacity-[0.06] select-none">
-                format_quote
-              </span>
+              <span className="material-symbols-outlined text-[1.6rem] text-[var(--brand)]">format_quote</span>
 
-              <p className="flex-1 text-sm leading-7 text-[var(--muted)] italic">&ldquo;{t.quote}&rdquo;</p>
+              <p className="mt-5 flex-1 text-[0.98rem] leading-7 text-[var(--foreground)]/80 italic">
+                &ldquo;{t.quote}&rdquo;
+              </p>
 
-              <div className="mt-6 flex items-center gap-3 border-t border-[var(--border)] pt-5">
-                <div
-                  className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-[var(--brand)] text-xs font-bold text-white"
-                >
+              <div className="mt-8 flex items-center gap-3 border-t border-black/5 pt-5">
+                <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-[var(--brand)] text-xs font-bold text-white">
                   {t.initials}
                 </div>
                 <div>
                   <div className="text-sm font-semibold text-[var(--foreground)]">{t.name}</div>
-                  <div className="text-xs text-[var(--muted)] italic">{t.title}, {t.organization}</div>
+                  <div className="text-xs text-[var(--muted)] italic">
+                    {t.title}, {t.organization}
+                  </div>
                 </div>
               </div>
             </article>
@@ -202,18 +193,18 @@ export function TestimonialsGrid() {
 /* ─── CTA ────────────────────────────────────────────────────────────── */
 export function TestimonialsCTA() {
   return (
-    <section className="relative overflow-hidden bg-white py-20">
-      <div className="pointer-events-none absolute inset-0 bg-gradient-to-r from-teal-50/60 to-blue-50/60" />
-      <div className="relative mx-auto max-w-7xl px-6 lg:px-10">
+    <section className="relative overflow-hidden bg-[#eafaf7] py-18 lg:py-24">
+      <div className="pointer-events-none absolute inset-0 bg-gradient-to-r from-white/30 via-transparent to-white/20" />
+      <div className="relative mx-auto max-w-4xl px-6 lg:px-10">
         <div className="text-center">
-          <h2 className="text-3xl font-bold text-[var(--foreground)] sm:text-5xl">
+          <h2 className="text-[clamp(2rem,4vw,3.5rem)] font-bold tracking-[-0.04em] text-[var(--foreground)]">
             Want to be our next success story?
           </h2>
-          <p className="mx-auto mt-5 max-w-2xl text-lg text-[var(--muted)]">
+          <p className="mx-auto mt-5 max-w-2xl text-[1rem] leading-7 text-[var(--muted)] sm:text-[1.05rem]">
             Join hundreds of organizations transforming the world. Let&apos;s discuss your mission
             and how we can support it.
           </p>
-          <div className="mt-8 flex flex-col items-center gap-4 sm:flex-row sm:justify-center">
+          <div className="mt-8 flex flex-col items-center justify-center gap-4 sm:flex-row">
             <Link
               id="testimonials-contact-cta"
               href="/contact"
@@ -224,7 +215,7 @@ export function TestimonialsCTA() {
             <Link
               id="testimonials-demo-cta"
               href="/contact"
-              className="inline-flex items-center rounded-lg border border-[var(--border-medium)] bg-white px-8 py-3.5 text-sm font-semibold text-[var(--foreground)] transition-all duration-150 hover:bg-gray-50 hover:-translate-y-0.5"
+              className="inline-flex items-center rounded-lg border border-[var(--brand)] bg-white px-8 py-3.5 text-sm font-semibold text-[var(--brand)] transition-all duration-150 hover:bg-blue-50 hover:-translate-y-0.5"
             >
               Request a Demo
             </Link>

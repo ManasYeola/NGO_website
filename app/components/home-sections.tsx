@@ -4,89 +4,102 @@ import Link from "next/link";
 /* ─── Hero Section ──────────────────────────────────────────────────── */
 export function HeroSection() {
   return (
-    <section className="bg-white pt-16 pb-0">
-      <div className="mx-auto max-w-7xl px-6 lg:px-10">
-        <div className="max-w-3xl">
-          {/* Badge */}
-          <div className="inline-flex items-center gap-2 rounded-full border border-[var(--border)] bg-blue-50 px-4 py-1.5 text-xs font-semibold uppercase tracking-widest text-[var(--brand)] mb-8">
-            <span className="material-symbols-outlined text-[14px]">public</span>
-            Global NGO Impact Platform
-          </div>
-
-          {/* Headline */}
-          <h1 className="text-5xl font-bold leading-tight text-[var(--foreground)] sm:text-6xl lg:text-7xl">
-            Advancing Global NGO Impact
-            <br />
-            Through{" "}
-            <span className="text-[var(--brand)]">Digital Rigor.</span>
-          </h1>
-
-          {/* Subtitle */}
-          <p className="mt-6 max-w-2xl text-lg leading-8 text-[var(--muted)]">
-            We bridge the gap between world-class software engineering and boots-on-the-ground
-            social change. Professional systems designed for those who change the world.
-          </p>
-
-          {/* CTA Buttons */}
-          <div className="mt-8 flex flex-wrap gap-4">
-            <Link
-              id="hero-partner-cta"
-              href="/contact"
-              className="inline-flex items-center gap-2 rounded-lg bg-[var(--brand)] px-6 py-3 text-sm font-semibold text-white transition-all duration-150 hover:bg-[var(--brand-dark)] hover:-translate-y-0.5"
+    <section className="bg-[var(--bg)]">
+      <div className="mx-auto max-w-7xl px-6 pb-24 pt-3 lg:px-10 lg:pb-32 lg:pt-5">
+        <div className="grid gap-8 lg:grid-cols-[0.94fr_1.06fr] lg:items-start">
+          <div className="max-w-xl pt-3 lg:pt-5">
+            <h1
+              className="max-w-[540px] font-extrabold text-[var(--foreground)]"
+              style={{ fontSize: "clamp(1.95rem, 2.9vw, 2.95rem)", lineHeight: 1.02, letterSpacing: "-0.04em" }}
             >
-              Partner With Us
-            </Link>
-            <Link
-              id="hero-impact-cta"
-              href="/timeline"
-              className="inline-flex items-center gap-2 rounded-lg border border-[var(--border-medium)] bg-white px-6 py-3 text-sm font-semibold text-[var(--foreground)] transition-all duration-150 hover:bg-gray-50 hover:-translate-y-0.5"
-            >
-              View Our Impact
-            </Link>
-          </div>
+              Empowering Impact
+              <br />
+              Through <span className="text-[var(--brand)]">Digital Rigor.</span>
+            </h1>
 
-          {/* Meta stats */}
-          <div className="mt-10 flex items-center gap-10 pb-12">
-            <div>
-              <div className="text-xs font-semibold uppercase tracking-widest text-[var(--muted)]">Established</div>
-              <div className="mt-1 text-base font-bold text-[var(--foreground)]">2014</div>
+            <p className="mt-3 max-w-[460px] text-[0.85rem] leading-6 text-[var(--muted)]">
+              We bridge the gap between world-class software engineering and boots-on-the-ground
+              social change. Professional systems designed for those who change the world.
+            </p>
+
+            <div className="mt-7 flex flex-wrap gap-3">
+              <Link
+                id="hero-partner-cta"
+                href="/contact"
+                className="inline-flex items-center rounded-lg bg-[var(--brand)] px-5 py-2.5 text-sm font-semibold text-white transition-all duration-150 hover:bg-[var(--brand-dark)]"
+              >
+                Partner With Us
+              </Link>
+              <Link
+                id="hero-impact-cta"
+                href="/timeline"
+                className="inline-flex items-center rounded-lg border border-[var(--brand)] bg-white px-5 py-2.5 text-sm font-medium text-[var(--brand)] transition-all duration-150 hover:bg-blue-50"
+              >
+                View Our Impact
+              </Link>
             </div>
-            <div className="h-8 w-px bg-[var(--border)]" />
-            <div>
-              <div className="text-xs font-semibold uppercase tracking-widest text-[var(--muted)]">Reach</div>
-              <div className="mt-1 text-base font-bold text-[var(--foreground)]">Global</div>
+
+            <div className="mt-8 flex items-start gap-10 pb-2">
+              <div>
+                <div className="text-[11px] font-medium text-[var(--brand)]">Established</div>
+                <div className="mt-1 text-sm font-medium text-[var(--foreground)]">2014</div>
+              </div>
+              <div>
+                <div className="text-[11px] font-medium text-[var(--brand)]">Reach</div>
+                <div className="mt-1 text-sm font-medium text-[var(--foreground)]">Global</div>
+              </div>
             </div>
           </div>
+
+          <div className="hidden lg:block" aria-hidden="true" />
         </div>
-      </div>
 
-      {/* Photo Strip */}
-      <div className="mt-0 w-full overflow-hidden">
-        <div className="flex gap-3 px-6 lg:px-10 mx-auto max-w-7xl pb-0">
-          {[
-            { src: "/ngo_workshop.png", alt: "Community workshop and training session" },
-            { src: "/ngo_dashboard.png", alt: "NGO data analytics dashboard" },
-            { src: "/ngo_field.png", alt: "Field workers with technology" },
-          ].map((img, i) => (
-            <div
-              key={i}
-              className="relative h-64 flex-1 overflow-hidden rounded-2xl bg-gray-100 lg:h-80"
-              style={{ minWidth: 0 }}
-            >
-              <Image
-                src={img.src}
-                alt={img.alt}
-                fill
-                className="object-cover"
-                sizes="(max-width: 768px) 90vw, 33vw"
-              />
-            </div>
-          ))}
+        <div className="mt-5 grid grid-cols-4 gap-4 lg:gap-5">
+          <div className="relative h-[154px] overflow-hidden rounded-xl bg-gray-100 shadow-sm">
+            <Image
+              src="/ngo_gallery_1.png"
+              alt="Community meeting and training session"
+              fill
+              className="object-cover"
+              sizes="(max-width: 1280px) 50vw, 20vw"
+              priority
+            />
+          </div>
+          <div className="relative h-[154px] overflow-hidden rounded-xl bg-gray-100 shadow-sm">
+            <Image
+              src="/ngo_workshop.png"
+              alt="Community workshop and discussion"
+              fill
+              className="object-cover"
+              sizes="(max-width: 1280px) 50vw, 26vw"
+            />
+          </div>
+          <div className="relative h-[154px] overflow-hidden rounded-xl bg-gray-100 shadow-sm">
+            <Image
+              src="/ngo_dashboard.png"
+              alt="NGO analytics dashboard"
+              fill
+              className="object-cover"
+              sizes="(max-width: 1280px) 100vw, 24vw"
+            />
+          </div>
+          <div className="relative h-[154px] overflow-hidden rounded-xl bg-gray-100 shadow-sm">
+            <Image
+              src="/ngo_field.png"
+              alt="Field workers in the community"
+              fill
+              className="object-cover"
+              sizes="(max-width: 1280px) 50vw, 18vw"
+            />
+          </div>
         </div>
       </div>
     </section>
   );
 }
+
+
+
 
 /* ─── About Section ─────────────────────────────────────────────────── */
 export function AboutSection() {
@@ -97,51 +110,36 @@ export function AboutSection() {
   ];
 
   return (
-    <section className="bg-[var(--bg-alt)] py-20">
+    <section className="bg-[var(--bg)] py-20 pt-64 lg:py-24 lg:pt-72">
       <div className="mx-auto max-w-7xl px-6 lg:px-10">
-        <div className="grid gap-12 lg:grid-cols-2 lg:items-center">
+        <div className="grid gap-10 lg:grid-cols-[0.95fr_1.05fr] lg:items-center">
           {/* Text */}
-          <div>
-            <h2 className="text-3xl font-bold text-[var(--foreground)] sm:text-4xl">
+          <div className="max-w-[470px]">
+            <h2 className="text-[1.75rem] font-bold tracking-tight text-[var(--foreground)] sm:text-3xl">
               About NGO Management Systems
             </h2>
-            <p className="mt-5 text-base leading-7 text-[var(--muted)]">
+            <p className="mt-4 text-sm leading-7 text-[var(--muted)]">
               We are dedicated to bridging the gap between world-class software engineering and
               boots-on-the-ground social change. Our mission is to provide NGOs with the digital
               infrastructure they need to maximize their impact and streamline operations globally.
             </p>
 
             {/* Values */}
-            <div className="mt-8 flex items-center gap-10">
+            <div className="mt-9 flex items-center gap-12">
               {values.map((v) => (
                 <div key={v.label} className="flex flex-col items-center gap-2">
-                  <span className="material-symbols-outlined text-3xl text-[var(--brand)]">{v.icon}</span>
-                  <span className="text-sm font-semibold text-[var(--foreground)]">{v.label}</span>
+                  <span className="material-symbols-outlined text-[22px] text-[var(--brand)]">{v.icon}</span>
+                  <span className="text-[11px] font-medium text-[var(--foreground)]">{v.label}</span>
                 </div>
               ))}
             </div>
           </div>
 
-          {/* Right — decorative card */}
+          {/* Right — simple placeholder card */}
           <div className="relative">
-            <div className="aspect-[4/3] overflow-hidden rounded-2xl bg-gray-100 shadow-lg">
-              <div className="flex h-full w-full items-center justify-center bg-gradient-to-br from-blue-50 to-teal-50">
-                <div className="text-center">
-                  <span className="material-symbols-outlined text-8xl text-[var(--brand)] opacity-20">corporate_fare</span>
-                  <p className="mt-4 text-sm font-medium text-[var(--muted)]">Building infrastructure<br />for global good</p>
-                </div>
-              </div>
-            </div>
-            {/* Floating badge */}
-            <div className="absolute -bottom-4 -left-4 rounded-xl bg-white p-4 shadow-lg">
-              <div className="flex items-center gap-3">
-                <div className="flex h-10 w-10 items-center justify-center rounded-full bg-blue-100">
-                  <span className="material-symbols-outlined text-[18px] text-[var(--brand)]">group</span>
-                </div>
-                <div>
-                  <div className="text-sm font-bold text-[var(--foreground)]">180+ NGOs</div>
-                  <div className="text-xs text-[var(--muted)]">Worldwide partners</div>
-                </div>
+            <div className="aspect-[4/3] overflow-hidden rounded-2xl border border-transparent bg-[#edf1f7] shadow-sm">
+              <div className="flex h-full w-full items-center justify-center">
+                <span className="material-symbols-outlined text-[5.5rem] text-[#c9d4ea]">corporate_fare</span>
               </div>
             </div>
           </div>
@@ -154,23 +152,23 @@ export function AboutSection() {
 /* ─── Dark Stats Bar ─────────────────────────────────────────────────── */
 export function StatsBar() {
   const stats = [
-    { value: "50+", label: "NGOs Served" },
-    { value: "10+", label: "Years of Impact" },
-    { value: "1M+", label: "Lives Touched" },
-    { value: "24/7", label: "Expert Support" },
+    { value: "50+", label: "NGOS SERVED" },
+    { value: "10+", label: "YEARS OF IMPACT" },
+    { value: "1M+", label: "LIVES TOUCHED" },
+    { value: "24/7", label: "EXPERT SUPPORT" },
   ];
 
   return (
-    <section className="bg-[var(--bg-dark)] py-12">
+    <section className="bg-[var(--bg-dark)] py-10">
       <div className="mx-auto max-w-7xl px-6 lg:px-10">
-        <div className="grid grid-cols-2 gap-8 sm:grid-cols-4">
+        <div className="grid grid-cols-2 gap-6 sm:grid-cols-4">
           {stats.map((stat, i) => (
             <div
               key={stat.label}
               className={`flex flex-col items-center gap-1 text-center ${i < stats.length - 1 ? "sm:border-r sm:border-white/10" : ""}`}
             >
-              <div className="text-3xl font-bold text-[var(--teal)] sm:text-4xl">{stat.value}</div>
-              <div className="text-xs font-semibold uppercase tracking-widest text-gray-400">{stat.label}</div>
+              <div className="text-[2rem] font-bold leading-none text-[#58eadf] sm:text-[2.2rem]">{stat.value}</div>
+              <div className="text-[11px] font-semibold uppercase tracking-[0.18em] text-gray-400">{stat.label}</div>
             </div>
           ))}
         </div>
@@ -216,19 +214,24 @@ export function ServicesSection() {
     <section className="bg-white py-20">
       <div className="mx-auto max-w-7xl px-6 lg:px-10">
         <div className="grid gap-12 lg:grid-cols-[1fr_1.5fr] lg:items-start">
-          {/* Left: intro text */}
+          {/* Left: Our Mission */}
           <div className="lg:sticky lg:top-28">
-            <p className="text-xs font-semibold uppercase tracking-widest text-[var(--brand)]">Our Services</p>
-            <h2 className="mt-3 text-3xl font-bold text-[var(--foreground)] sm:text-4xl">
-              Building the backbone of modern NGOs.
-            </h2>
-            <p className="mt-5 text-base leading-7 text-[var(--muted)]">
-              By designing robust, human-centric management systems, we enable organizations to focus
-              less on administrative friction and more on their core mission of creating global change.
+            {/* Teal accent line + heading */}
+            <div className="flex items-center gap-3 mb-4">
+              <div className="w-6 h-0.5 bg-[var(--teal)] flex-shrink-0"></div>
+              <h2 className="text-3xl font-bold text-[var(--foreground)] sm:text-3xl">
+                Our Mission
+              </h2>
+            </div>
+            <p className="text-sm leading-7 text-[var(--muted)]">
+              We are a dedicated collective of technologists and social impact experts committed to
+              building the backbone of modern NGOs. By designing robust, human-centric management
+              systems, we enable organizations to focus less on administrative friction and more on
+              their core mission of creating global change.
             </p>
 
             {/* Featured quote */}
-            <blockquote className="mt-8 rounded-xl border border-[var(--border)] bg-blue-50 p-5">
+            <blockquote className="mt-8 rounded-xl border border-[var(--border)] bg-white p-5 shadow-sm">
               <p className="text-sm leading-7 text-[var(--foreground)] italic">
                 &ldquo;NGOSystems transformed how we track our field operations. We now have
                 real-time data that drives our every decision.&rdquo;
@@ -252,9 +255,9 @@ export function ServicesSection() {
               {services.slice(0, 2).map((svc) => (
                 <div
                   key={svc.title}
-                  className="rounded-2xl border border-[var(--border)] bg-[var(--bg-alt)] p-6 transition-shadow hover:shadow-md"
+                  className="rounded-2xl border border-[var(--border)] bg-white p-6 transition-shadow hover:shadow-md"
                 >
-                  <span className="material-symbols-outlined text-3xl text-[var(--teal)]">{svc.icon}</span>
+                  <span className="material-symbols-outlined text-2xl text-[var(--teal)]">{svc.icon}</span>
                   <h3 className="mt-4 text-base font-bold text-[var(--foreground)]">{svc.title}</h3>
                   <p className="mt-2 text-sm leading-6 text-[var(--muted)]">{svc.description}</p>
                 </div>
@@ -265,19 +268,19 @@ export function ServicesSection() {
             <div className="rounded-2xl bg-[var(--brand)] p-6 text-white">
               <div className="flex items-start justify-between gap-4">
                 <div className="flex-1">
-                  <span className="material-symbols-outlined text-3xl text-white/80">{services[2].icon}</span>
+                  <span className="material-symbols-outlined text-2xl text-white/80">{services[2].icon}</span>
                   <h3 className="mt-4 text-lg font-bold">{services[2].title}</h3>
                   <p className="mt-2 text-sm leading-6 text-white/80">{services[2].description}</p>
                 </div>
-                <div className="hidden shrink-0 sm:flex h-24 w-24 items-center justify-center rounded-xl bg-white/10">
-                  <span className="material-symbols-outlined text-5xl text-white/30">verified_user</span>
+                <div className="hidden shrink-0 sm:flex h-20 w-20 items-center justify-center rounded-xl bg-white/10">
+                  <span className="material-symbols-outlined text-4xl text-white/40">verified_user</span>
                 </div>
               </div>
             </div>
 
             {/* Row 3: Training card */}
-            <div className="rounded-2xl border border-[var(--border)] bg-[var(--bg-alt)] p-6 transition-shadow hover:shadow-md">
-              <span className="material-symbols-outlined text-3xl text-[var(--teal)]">{services[3].icon}</span>
+            <div className="rounded-2xl border border-[var(--border)] bg-white p-6 transition-shadow hover:shadow-md">
+              <span className="material-symbols-outlined text-2xl text-[var(--teal)]">{services[3].icon}</span>
               <h3 className="mt-4 text-base font-bold text-[var(--foreground)]">{services[3].title}</h3>
               <p className="mt-2 text-sm leading-6 text-[var(--muted)]">{services[3].description}</p>
             </div>
@@ -400,12 +403,9 @@ export function TestimonialsPreview() {
 export function CtaBand() {
   return (
     <section className="relative overflow-hidden bg-[var(--bg-alt)] py-24">
-      {/* Decorative ring */}
+      {/* Decorative ring — single bold blue circle */}
       <div
-        className="pointer-events-none absolute -right-16 top-1/2 h-80 w-80 -translate-y-1/2 rounded-full border-[18px] border-[var(--teal)] opacity-20"
-      />
-      <div
-        className="pointer-events-none absolute -right-4 top-1/2 h-52 w-52 -translate-y-1/2 rounded-full border-[10px] border-[var(--brand)] opacity-10"
+        className="pointer-events-none absolute -right-16 top-1/2 h-72 w-72 -translate-y-1/2 rounded-full border-[20px] border-[var(--brand)] opacity-30"
       />
 
       <div className="mx-auto max-w-7xl px-6 lg:px-10">
@@ -413,7 +413,7 @@ export function CtaBand() {
           <h2 className="text-4xl font-bold text-[var(--foreground)] sm:text-5xl">
             Ready to scale your mission?
           </h2>
-          <p className="mt-5 text-lg text-[var(--muted)]">
+          <p className="mt-5 text-base text-[var(--muted)]">
             Join dozens of forward-thinking NGOs who have modernized their operations with NGOSystems.
             Let&apos;s build something that matters.
           </p>
