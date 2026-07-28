@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useReveal } from "../components/useReveal";
 
 const contactInfo = [
   {
@@ -27,6 +28,7 @@ export default function ContactPage() {
   });
   const [submitted, setSubmitted] = useState(false);
   const [loading, setLoading] = useState(false);
+  const contentReveal = useReveal(0.08);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -40,11 +42,11 @@ export default function ContactPage() {
     <div className="page-wrapper">
 
       {/* ── Header ── */}
-      <section style={{ padding: "96px 24px 72px", position: "relative", overflow: "hidden" }}>
-        <div style={{
+      <section className="page-header-section" style={{ padding: "96px 24px 72px", position: "relative", overflow: "hidden" }}>
+        <div className="page-header-rule" style={{
           position: "absolute", inset: 0, zIndex: 0,
-          backgroundImage: "repeating-linear-gradient(0deg, transparent, transparent 79px, var(--surface-border) 80px)",
-          opacity: 0.3,
+          backgroundImage: "repeating-linear-gradient(0deg, transparent, transparent 79px, var(--page-header-line) 80px)",
+          opacity: 1,
         }} />
         <div style={{
           position: "absolute", left: 0, top: 0, bottom: 0, width: 3,
@@ -82,20 +84,26 @@ export default function ContactPage() {
       {/* ── Content Grid ── */}
       <section style={{ padding: "0 24px 80px" }}>
         <div style={{ maxWidth: "1200px", margin: "0 auto" }}>
-          <div style={{
-            display: "grid", gridTemplateColumns: "1fr 1.6fr", gap: "0",
-            border: "1px solid var(--surface-border)", borderRadius: "10px", overflow: "hidden",
-          }} className="contact-grid">
+          <div
+            ref={contentReveal.ref}
+            style={{
+              display: "grid", gridTemplateColumns: "1fr 1.6fr", gap: "0",
+              borderRadius: "40px", overflow: "hidden",
+              boxShadow: "var(--shadow-lg)",
+              border: "1px solid rgba(255,255,255,0.06)",
+            }} className="contact-grid">
 
-            {/* Left – Info */}
             <div style={{
               background: "var(--bg-secondary)",
-              borderRight: "1px solid var(--surface-border)",
+              borderRight: "1px solid rgba(255,255,255,0.05)",
             }}>
               {contactInfo.map((item, i) => (
                 <div key={item.label} style={{
                   padding: "28px 32px",
                   borderBottom: i < contactInfo.length - 1 ? "1px solid var(--surface-border)" : "none",
+                  opacity: contentReveal.visible ? 1 : 0,
+                  transform: contentReveal.visible ? "translateX(0)" : "translateX(-24px)",
+                  transition: `opacity 0.5s ease ${i * 0.09}s, transform 0.5s cubic-bezier(0.23,1,0.32,1) ${i * 0.09}s`,
                 }}>
                   <p style={{
                     fontSize: "0.68rem", fontWeight: 700, letterSpacing: "0.18em",
@@ -110,7 +118,12 @@ export default function ContactPage() {
               ))}
 
               {/* Social links */}
-              <div style={{ padding: "28px 32px" }}>
+              <div style={{
+                padding: "28px 32px",
+                opacity: contentReveal.visible ? 1 : 0,
+                transform: contentReveal.visible ? "translateX(0)" : "translateX(-24px)",
+                transition: `opacity 0.5s ease ${contactInfo.length * 0.09}s, transform 0.5s cubic-bezier(0.23,1,0.32,1) ${contactInfo.length * 0.09}s`,
+              }}>
                 <p style={{
                   fontSize: "0.68rem", fontWeight: 700, letterSpacing: "0.18em",
                   textTransform: "uppercase", color: "#4f7fa8", marginBottom: "14px",
@@ -142,8 +155,15 @@ export default function ContactPage() {
               </div>
             </div>
 
-            {/* Right – Form */}
-            <div style={{ padding: "40px 44px", background: "var(--surface)" }}>
+            <div style={{
+              padding: "44px 48px",
+              background: "linear-gradient(135deg, var(--surface) 0%, rgba(79,127,168,0.04) 100%)",
+              backdropFilter: "blur(16px)",
+              WebkitBackdropFilter: "blur(16px)",
+              opacity: contentReveal.visible ? 1 : 0,
+              transform: contentReveal.visible ? "translateX(0)" : "translateX(32px)",
+              transition: "opacity 0.65s ease 0.15s, transform 0.65s cubic-bezier(0.23,1,0.32,1) 0.15s",
+            }}>
               {submitted ? (
                 <div style={{ padding: "48px 0", textAlign: "center" }}>
                   <div style={{
@@ -278,11 +298,13 @@ export default function ContactPage() {
                       type="submit"
                       disabled={loading}
                       style={{
-                        padding: "13px 24px", borderRadius: "8px",
-                        background: loading ? "rgba(181,129,61,0.5)" : "#b5813d",
+                        padding: "13px 28px", borderRadius: "100px",
+                        background: loading ? "rgba(181,129,61,0.5)" : "linear-gradient(135deg, #b5813d, #c8a96e)",
                         color: "#fff", fontWeight: 700, fontSize: "0.88rem",
                         border: "none", cursor: loading ? "not-allowed" : "pointer",
-                        transition: "opacity 0.2s ease", letterSpacing: "0.02em",
+                        boxShadow: loading ? "none" : "0 4px 20px rgba(181,129,61,0.35)",
+                        transition: "transform 0.2s ease, box-shadow 0.2s ease", letterSpacing: "0.02em",
+                        alignSelf: "flex-start",
                       }}
                       onMouseEnter={(e) => { if (!loading) (e.currentTarget as HTMLElement).style.opacity = "0.85"; }}
                       onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.opacity = "1"; }}

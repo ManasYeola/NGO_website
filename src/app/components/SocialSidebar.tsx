@@ -91,7 +91,7 @@ export default function SocialSidebar() {
   }, []);
 
   return (
-    <>
+    <div className="social-sidebar-wrapper">
       {/* Backdrop blur overlay */}
       {open && (
         <div
@@ -386,6 +386,6 @@ export default function SocialSidebar() {
           /* Narrower panel on small screens */
         }
       `}</style>
-    </>
+    </div>
   );
 }

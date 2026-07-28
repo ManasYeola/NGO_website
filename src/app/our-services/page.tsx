@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import { useReveal } from "../components/useReveal";
 
 /* ────────────────────────────────────────────────────────────
    SVG Icon Components  –  simple, monochrome, no emojis
@@ -183,8 +184,10 @@ const tabAccent: Record<string, { color: string; bg: string; border: string }> =
 type Tab = "institutions" | "temples" | "ngos";
 
 export default function OurServicesPage() {
-  const [activeTab, setActiveTab]         = useState<Tab>("institutions");
+  const [activeTab, setActiveTab]           = useState<Tab>("institutions");
   const [filterCategory, setFilterCategory] = useState<string>("All");
+  const tableReveal  = useReveal(0.08);
+  const ctaReveal    = useReveal(0.1);
 
   const filteredDeadlines =
     filterCategory === "All"
@@ -209,13 +212,13 @@ export default function OurServicesPage() {
       {/* ══════════════════════════════════
           HERO — editorial, typographic
       ══════════════════════════════════ */}
-      <section style={{ padding: "96px 24px 72px", position: "relative", overflow: "hidden" }}>
+      <section className="page-header-section" style={{ padding: "96px 24px 72px", position: "relative", overflow: "hidden" }}>
 
-        {/* Subtle ruled background lines — design detail, not AI orbs */}
-        <div style={{
+        {/* Subtle ruled background lines */}
+        <div className="page-header-rule" style={{
           position: "absolute", inset: 0, zIndex: 0,
-          backgroundImage: "repeating-linear-gradient(0deg, transparent, transparent 79px, var(--surface-border) 80px)",
-          opacity: 0.35,
+          backgroundImage: "repeating-linear-gradient(0deg, transparent, transparent 79px, var(--page-header-line) 80px)",
+          opacity: 1,
         }} />
 
         {/* Thin left accent bar */}
@@ -344,9 +347,11 @@ export default function OurServicesPage() {
           </div>
 
           {/* Table shell */}
-          <div style={{
-            border: "1px solid var(--surface-border)", borderRadius: "12px", overflow: "hidden",
-          }}>
+          <div
+            ref={tableReveal.ref}
+            style={{
+              border: "1px solid var(--surface-border)", borderRadius: "12px", overflow: "hidden",
+            }}>
             {/* Header row */}
             <div
               className="dtbl-header"
@@ -365,7 +370,7 @@ export default function OurServicesPage() {
               ))}
             </div>
 
-            {/* Rows */}
+            {/* Rows — cascade in from left */}
             {filteredDeadlines.map((row, i) => {
               const pc  = priorityConfig[row.priority];
               const cs  = catStyle[row.category] ?? catStyle.All;
@@ -378,7 +383,10 @@ export default function OurServicesPage() {
                     display: "grid", gridTemplateColumns: "2fr 1.1fr 1.1fr 0.9fr",
                     padding: "16px 24px", alignItems: "center",
                     borderBottom: isLast ? "none" : "1px solid var(--surface-border)",
-                    transition: "background 0.15s ease", cursor: "default",
+                    cursor: "default",
+                    opacity: tableReveal.visible ? 1 : 0,
+                    transform: tableReveal.visible ? "translateX(0)" : "translateX(-16px)",
+                    transition: `opacity 0.45s ease ${i * 0.05}s, transform 0.45s ease ${i * 0.05}s, background 0.15s ease`,
                   }}
                   onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.background = "var(--surface)"; }}
                   onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.background = "transparent"; }}
@@ -490,30 +498,33 @@ export default function OurServicesPage() {
             })}
           </div>
 
-          {/* Cards */}
+          {/* Cards — floating grid with proper gap */}
           <div
+            key={activeTab}
             className="svc-grid"
-            style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: "1px", background: "var(--surface-border)" }}
+            style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: "18px" }}
           >
             {servicesMap[activeTab].map((svc, i) => {
               const ac = tabAccent[activeTab];
               return (
                 <div
                   key={svc.title}
-                  className="svc-card"
+                  className="svc-card card-float"
                   style={{
-                    background: "var(--background)",
+                    background: "var(--surface)",
                     padding: "32px 28px",
                     position: "relative",
-                    transition: "background 0.25s ease",
                     cursor: "default",
-                    borderLeft: i % 3 === 0 ? "none" : undefined,
+                    borderRadius: "24px",
+                    opacity: 0,
+                    transform: "translateY(20px)",
+                    animation: `fade-up 0.5s ease ${i * 0.07}s both`,
                   }}
                   onMouseEnter={(e) => {
                     (e.currentTarget as HTMLElement).style.background = "var(--bg-secondary)";
                   }}
                   onMouseLeave={(e) => {
-                    (e.currentTarget as HTMLElement).style.background = "var(--background)";
+                    (e.currentTarget as HTMLElement).style.background = "var(--surface)";
                   }}
                 >
                   {/* Top accent strip */}
@@ -527,10 +538,12 @@ export default function OurServicesPage() {
 
                   {/* Icon */}
                   <div style={{
-                    width: 44, height: 44, borderRadius: "8px",
-                    background: "var(--surface)", border: "1px solid var(--surface-border)",
+                    width: 48, height: 48, borderRadius: "16px",
+                    background: ac.bg,
+                    border: `1px solid ${ac.border}`,
                     display: "flex", alignItems: "center", justifyContent: "center",
                     color: ac.color, marginBottom: "18px",
+                    boxShadow: `0 0 20px ${ac.color}25`,
                   }}>
                     <svc.IconCmp />
                   </div>
@@ -561,23 +574,29 @@ export default function OurServicesPage() {
       </section>
 
 
-      {/* ══════════════════════════════════
-          CTA — understated, editorial
-      ══════════════════════════════════ */}
+      {/* CTA */}
       <section style={{ padding: "0 24px 100px" }}>
         <div style={{ maxWidth: "1200px", margin: "0 auto" }}>
-          <div style={{
-            display: "grid", gridTemplateColumns: "1fr 1fr",
-            gap: "0",
-            border: "1px solid var(--surface-border)",
-            borderRadius: "12px", overflow: "hidden",
-          }} className="cta-grid">
+          <div
+            ref={ctaReveal.ref}
+            style={{
+              display: "grid", gridTemplateColumns: "1fr 1fr",
+              gap: "0",
+              borderRadius: "40px", overflow: "hidden",
+              boxShadow: "var(--shadow-lg)",
+              border: "1px solid rgba(255,255,255,0.06)",
+            }} className="cta-grid">
 
             {/* Left text panel */}
             <div style={{
               padding: "56px 48px",
-              background: "var(--surface)",
-              borderRight: "1px solid var(--surface-border)",
+              background: "linear-gradient(135deg, var(--surface) 0%, rgba(181,129,61,0.04) 100%)",
+              backdropFilter: "blur(16px)",
+              WebkitBackdropFilter: "blur(16px)",
+              borderRight: "1px solid rgba(255,255,255,0.05)",
+              opacity: ctaReveal.visible ? 1 : 0,
+              transform: ctaReveal.visible ? "translateX(0)" : "translateX(-36px)",
+              transition: "opacity 0.65s ease, transform 0.65s cubic-bezier(0.23,1,0.32,1)",
             }}>
               <p style={{
                 fontSize: "0.68rem", fontWeight: 700, letterSpacing: "0.2em",
@@ -601,13 +620,21 @@ export default function OurServicesPage() {
               <div style={{ display: "flex", gap: "12px", flexWrap: "wrap" }}>
                 <Link href="/contact" style={{
                   display: "inline-flex", alignItems: "center", gap: "8px",
-                  padding: "12px 24px", borderRadius: "8px",
-                  background: "#b5813d", color: "#fff",
+                  padding: "12px 24px", borderRadius: "100px",
+                  background: "linear-gradient(135deg, #b5813d, #c8a96e)", color: "#fff",
                   fontWeight: 700, fontSize: "0.88rem",
-                  textDecoration: "none", transition: "opacity 0.2s ease",
+                  textDecoration: "none",
+                  boxShadow: "0 4px 20px rgba(181,129,61,0.35)",
+                  transition: "transform 0.2s ease, box-shadow 0.2s ease",
                 }}
-                  onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.opacity = "0.85"; }}
-                  onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.opacity = "1"; }}
+                  onMouseEnter={(e) => {
+                    (e.currentTarget as HTMLElement).style.transform = "translateY(-2px)";
+                    (e.currentTarget as HTMLElement).style.boxShadow = "0 8px 30px rgba(181,129,61,0.5)";
+                  }}
+                  onMouseLeave={(e) => {
+                    (e.currentTarget as HTMLElement).style.transform = "translateY(0)";
+                    (e.currentTarget as HTMLElement).style.boxShadow = "0 4px 20px rgba(181,129,61,0.35)";
+                  }}
                 >
                   Book a Free Consultation
                   <Icon.ArrowRight />
@@ -635,7 +662,12 @@ export default function OurServicesPage() {
             </div>
 
             {/* Right checklist panel */}
-            <div style={{ padding: "56px 48px", background: "var(--bg-secondary)" }}>
+            <div style={{
+              padding: "56px 48px", background: "var(--bg-secondary)",
+              opacity: ctaReveal.visible ? 1 : 0,
+              transform: ctaReveal.visible ? "translateX(0)" : "translateX(36px)",
+              transition: "opacity 0.65s ease 0.1s, transform 0.65s cubic-bezier(0.23,1,0.32,1) 0.1s",
+            }}>
               <p style={{
                 fontSize: "0.68rem", fontWeight: 700, letterSpacing: "0.2em",
                 textTransform: "uppercase", color: "var(--foreground-faint)",
@@ -648,8 +680,13 @@ export default function OurServicesPage() {
                   "Customised service roadmap for your entity",
                   "Transparent fee structure, no hidden charges",
                   "Ongoing support throughout the engagement",
-                ].map((item) => (
-                  <div key={item} style={{ display: "flex", alignItems: "flex-start", gap: "12px" }}>
+                ].map((item, i) => (
+                  <div key={item} style={{
+                    display: "flex", alignItems: "flex-start", gap: "12px",
+                    opacity: ctaReveal.visible ? 1 : 0,
+                    transform: ctaReveal.visible ? "translateX(0)" : "translateX(20px)",
+                    transition: `opacity 0.4s ease ${0.2 + i * 0.07}s, transform 0.4s ease ${0.2 + i * 0.07}s`,
+                  }}>
                     <div style={{
                       width: 22, height: 22, borderRadius: "50%",
                       background: "rgba(181,129,61,0.15)", border: "1px solid rgba(181,129,61,0.3)",

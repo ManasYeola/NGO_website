@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
+import { useReveal } from "../components/useReveal";
 
 const timeline = [
   {
@@ -138,40 +139,68 @@ function TimelineItem({ item, index }: { item: (typeof timeline)[0]; index: numb
   const { ref, visible } = useScrollReveal();
   const isLeft = index % 2 === 0;
   return (
-    <div ref={ref} style={{
-      display: "grid",
-      gridTemplateColumns: "1fr 60px 1fr",
-      alignItems: "center",
-      marginBottom: "56px",
-      opacity: visible ? 1 : 0,
-      transform: visible ? "translateY(0)" : isLeft ? "translateX(-60px)" : "translateX(60px)",
-      transition: `opacity 0.5s cubic-bezier(0.4,0,0.2,1) ${index * 0.06}s, transform 0.5s cubic-bezier(0.4,0,0.2,1) ${index * 0.06}s`,
-    }}>
+    <div ref={ref}
+      className="timeline-item-grid"
+      style={{
+        display: "grid",
+        gridTemplateColumns: "1fr 60px 1fr",
+        alignItems: "center",
+        marginBottom: "56px",
+        opacity: visible ? 1 : 0,
+        transform: visible ? "translateY(0)" : isLeft ? "translateX(-60px)" : "translateX(60px)",
+        transition: `opacity 0.5s cubic-bezier(0.4,0,0.2,1) ${index * 0.06}s, transform 0.5s cubic-bezier(0.4,0,0.2,1) ${index * 0.06}s`,
+      }}>
+      {/* Left cell — hidden on mobile */}
       {isLeft ? (
-        <div style={{ display: "flex", justifyContent: "flex-end", paddingRight: "12px" }}>
+        <div className="timeline-left-cell" style={{ display: "flex", justifyContent: "flex-end", paddingRight: "12px" }}>
           <TimelineCard item={item} align="right" />
         </div>
-      ) : <div />}
+      ) : <div className="timeline-left-cell" />}
 
       {/* Center dot */}
-      <div style={{ display: "flex", justifyContent: "center", position: "relative", zIndex: 2 }}>
+      <div className="timeline-center-cell" style={{ display: "flex", justifyContent: "center", position: "relative", zIndex: 2 }}>
+        {/* Outer halo ring */}
         <div style={{
-          width: 36, height: 36, borderRadius: "50%",
-          background: `${item.color}18`,
+          position: "absolute",
+          width: 56, height: 56, borderRadius: "50%",
+          border: `1.5px solid ${item.color}`,
+          opacity: visible ? 0.35 : 0,
+          transform: visible ? "scale(1)" : "scale(0.6)",
+          transition: `opacity 0.6s ease ${index * 0.06 + 0.15}s, transform 0.6s ease ${index * 0.06 + 0.15}s`,
+          animation: visible ? `timeline-pulse 2.4s ease-in-out ${index * 0.4}s infinite` : "none",
+          pointerEvents: "none",
+        }} />
+        {/* Main dot */}
+        <div style={{
+          width: 40, height: 40, borderRadius: "50%",
+          background: `${item.color}22`,
           border: `2px solid ${item.color}`,
           display: "flex", alignItems: "center", justifyContent: "center",
-          transition: "box-shadow 0.4s ease",
-          boxShadow: visible ? `0 0 16px ${item.color}50` : "none",
+          transition: `box-shadow 0.5s ease ${index * 0.06}s`,
+          boxShadow: visible
+            ? `0 0 0 4px ${item.color}25, 0 0 24px ${item.color}70, 0 0 52px ${item.color}35`
+            : "none",
         }}>
-          <div style={{ width: 8, height: 8, borderRadius: "50%", background: item.color }} />
+          <div style={{ width: 12, height: 12, borderRadius: "50%", background: item.color,
+            boxShadow: visible ? `0 0 8px ${item.color}` : "none",
+            transition: `box-shadow 0.5s ease ${index * 0.06}s`,
+          }} />
         </div>
       </div>
 
+      {/* Right cell — shown on mobile as the main content */}
       {!isLeft ? (
-        <div style={{ display: "flex", justifyContent: "flex-start", paddingLeft: "12px" }}>
+        <div className="timeline-right-cell" style={{ display: "flex", justifyContent: "flex-start", paddingLeft: "12px" }}>
           <TimelineCard item={item} align="left" />
         </div>
-      ) : <div />}
+      ) : (
+        <div className="timeline-right-cell" style={{ display: "flex", justifyContent: "flex-start", paddingLeft: "12px" }}>
+          {/* On desktop this is empty for left items; on mobile shows the card */}
+          <div className="mobile-timeline-card" style={{ display: "none" }}>
+            <TimelineCard item={item} align="left" />
+          </div>
+        </div>
+      )}
     </div>
   );
 }
@@ -243,9 +272,20 @@ function RoadmapTimeline() {
               <stop offset="80%"  stopColor="#9b8ea0" />
               <stop offset="100%" stopColor="#c0614a" />
             </linearGradient>
+            {/* Glow filter for the live path */}
+            <filter id="pathGlow" x="-40%" y="-5%" width="180%" height="110%">
+              <feGaussianBlur in="SourceGraphic" stdDeviation="4" result="blur" />
+              <feMerge>
+                <feMergeNode in="blur" />
+                <feMergeNode in="blur" />
+                <feMergeNode in="SourceGraphic" />
+              </feMerge>
+            </filter>
           </defs>
-          <path d={pathD} fill="none" stroke="rgba(180,160,140,0.08)" strokeWidth="4" strokeLinecap="round" />
-          <path ref={livePathRef} d={pathD} fill="none" stroke="url(#waveGrad)" strokeWidth="3" strokeLinecap="round" />
+          {/* Ghost trail */}
+          <path d={pathD} fill="none" stroke="rgba(180,160,140,0.06)" strokeWidth="5" strokeLinecap="round" />
+          {/* Glowing live path */}
+          <path ref={livePathRef} d={pathD} fill="none" stroke="url(#waveGrad)" strokeWidth="3.5" strokeLinecap="round" filter="url(#pathGlow)" />
         </svg>
       )}
       {timeline.map((item, i) => (
@@ -256,17 +296,22 @@ function RoadmapTimeline() {
 }
 
 export default function OurStoryPage() {
+  const missionReveal = useReveal(0.12);
+  const valuesReveal  = useReveal(0.1);
+  const teamReveal    = useReveal(0.1);
+  const ctaReveal     = useReveal(0.1);
+
   return (
     <div className="page-wrapper">
 
       {/* ── Hero ── */}
-      <section style={{
+      <section className="page-header-section" style={{
         padding: "96px 24px 72px", position: "relative", overflow: "hidden",
       }}>
-        <div style={{
+        <div className="page-header-rule" style={{
           position: "absolute", inset: 0, zIndex: 0,
-          backgroundImage: "repeating-linear-gradient(0deg, transparent, transparent 79px, var(--surface-border) 80px)",
-          opacity: 0.3,
+          backgroundImage: "repeating-linear-gradient(0deg, transparent, transparent 79px, var(--page-header-line) 80px)",
+          opacity: 1,
         }} />
         <div style={{
           position: "absolute", left: 0, top: 0, bottom: 0, width: 3,
@@ -307,22 +352,42 @@ export default function OurStoryPage() {
       {/* ── Mission / Vision ── */}
       <section style={{ padding: "0 24px 80px" }}>
         <div style={{ maxWidth: "1000px", margin: "0 auto" }}>
-          <div style={{
-            display: "grid", gridTemplateColumns: "1fr 1fr", gap: "0",
-            border: "1px solid var(--surface-border)", borderRadius: "10px", overflow: "hidden",
-          }} className="mission-grid">
+          <div
+            ref={missionReveal.ref}
+            style={{
+              display: "grid", gridTemplateColumns: "1fr 1fr", gap: "0",
+              borderRadius: "40px", overflow: "hidden",
+              boxShadow: "var(--shadow-lg)",
+              border: "1px solid rgba(255,255,255,0.06)",
+            }} className="mission-grid">
             {[
               { label: "Our Mission", color: "#b5813d", text: "To create a just, equitable, and sustainable society where every individual — regardless of their economic background — has access to quality education, healthcare, and opportunities for growth." },
               { label: "Our Vision",  color: "#4f7fa8", text: "An India where no child drops out of school due to poverty, no family skips meals, and every woman has the freedom and power to define her own future." },
             ].map((item, i) => (
               <div key={item.label} style={{
-                padding: "40px 36px",
-                background: i === 0 ? "var(--surface)" : "var(--bg-secondary)",
-                borderRight: i === 0 ? "1px solid var(--surface-border)" : "none",
+                padding: "48px 44px",
+                background: i === 0
+                  ? "linear-gradient(135deg, var(--surface) 0%, rgba(181,129,61,0.05) 100%)"
+                  : "var(--bg-secondary)",
+                backdropFilter: i === 0 ? "blur(16px)" : "none",
+                WebkitBackdropFilter: i === 0 ? "blur(16px)" : "none",
+                borderRight: i === 0 ? "1px solid rgba(255,255,255,0.05)" : "none",
+                opacity: missionReveal.visible ? 1 : 0,
+                transform: missionReveal.visible
+                  ? "perspective(700px) rotateX(0deg) translateY(0)"
+                  : "perspective(700px) rotateX(-18deg) translateY(28px)",
+                transition: `opacity 0.7s ease ${i * 0.15}s, transform 0.7s cubic-bezier(0.23,1,0.32,1) ${i * 0.15}s`,
+                position: "relative",
               }}>
+                {/* Accent top strip */}
+                <div style={{
+                  position: "absolute", top: 0, left: 0, right: 0, height: 3,
+                  background: `linear-gradient(to right, ${item.color}, transparent)`,
+                  borderRadius: i === 0 ? "40px 0 0 0" : "0 40px 0 0",
+                }} />
                 <p style={{
                   fontSize: "0.68rem", fontWeight: 700, letterSpacing: "0.2em",
-                  textTransform: "uppercase", color: item.color, marginBottom: "14px",
+                  textTransform: "uppercase", color: item.color, marginBottom: "16px",
                 }}>{item.label}</p>
                 <p style={{ color: "var(--foreground-muted)", lineHeight: 1.78, fontSize: "0.95rem" }}>
                   {item.text}
@@ -356,7 +421,7 @@ export default function OurStoryPage() {
       {/* ── Values ── */}
       <section style={{ padding: "0 24px 80px" }}>
         <div style={{ maxWidth: "1200px", margin: "0 auto" }}>
-          <div style={{ marginBottom: "40px" }}>
+          <div style={{ marginBottom: "40px", animation: "fade-up 0.5s ease both" }}>
             <p style={{
               fontSize: "0.68rem", fontWeight: 700, letterSpacing: "0.2em",
               textTransform: "uppercase", color: "#b5813d", marginBottom: "8px",
@@ -366,22 +431,40 @@ export default function OurStoryPage() {
               letterSpacing: "-0.02em", color: "var(--foreground)", lineHeight: 1.1,
             }}>Our Core Values</h2>
           </div>
-          <div style={{
-            display: "grid", gridTemplateColumns: "repeat(4,1fr)",
-            gap: "1px", background: "var(--surface-border)",
-            border: "1px solid var(--surface-border)",
-          }} className="values-grid">
+          <div
+            ref={valuesReveal.ref}
+            style={{
+              display: "grid", gridTemplateColumns: "repeat(4,1fr)",
+              gap: "16px",
+            }} className="values-grid">
             {values.map((v, i) => (
               <div key={v.title} style={{
-                background: "var(--background)", padding: "32px 24px",
-                transition: "background 0.22s ease", cursor: "default",
+                background: "var(--surface)",
+                padding: "32px 24px",
+                borderRadius: "28px",
+                border: "1px solid rgba(255,255,255,0.05)",
+                boxShadow: "var(--shadow-sm)",
+                cursor: "default",
+                opacity: valuesReveal.visible ? 1 : 0,
+                transform: valuesReveal.visible ? "scale(1)" : "scale(0.82)",
+                transition: `opacity 0.5s cubic-bezier(0.34,1.56,0.64,1) ${i * 0.08}s, transform 0.5s cubic-bezier(0.34,1.56,0.64,1) ${i * 0.08}s, box-shadow 0.3s ease`,
               }}
-                onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.background = "var(--bg-secondary)"; }}
-                onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.background = "var(--background)"; }}
+                onMouseEnter={(e) => {
+                  (e.currentTarget as HTMLElement).style.background = "var(--bg-secondary)";
+                  (e.currentTarget as HTMLElement).style.boxShadow = "var(--shadow-md)";
+                  (e.currentTarget as HTMLElement).style.transform = "translateY(-4px)";
+                }}
+                onMouseLeave={(e) => {
+                  (e.currentTarget as HTMLElement).style.background = "var(--surface)";
+                  (e.currentTarget as HTMLElement).style.boxShadow = "var(--shadow-sm)";
+                  (e.currentTarget as HTMLElement).style.transform = "translateY(0)";
+                }}
               >
                 <div style={{
-                  width: 3, height: 24, borderRadius: "2px",
-                  background: valueAccents[i], marginBottom: "20px",
+                  width: 3, height: 28, borderRadius: "2px",
+                  background: `linear-gradient(to bottom, ${valueAccents[i]}, ${valueAccents[i]}55)`,
+                  marginBottom: "20px",
+                  boxShadow: `0 0 12px ${valueAccents[i]}50`,
                 }} />
                 <h3 style={{
                   fontSize: "1rem", fontWeight: 700, color: "var(--foreground)",
@@ -397,7 +480,7 @@ export default function OurStoryPage() {
       {/* ── Team ── */}
       <section style={{ padding: "0 24px 80px" }}>
         <div style={{ maxWidth: "1200px", margin: "0 auto" }}>
-          <div style={{ marginBottom: "40px" }}>
+          <div style={{ marginBottom: "40px", animation: "fade-up 0.5s ease both" }}>
             <p style={{
               fontSize: "0.68rem", fontWeight: 700, letterSpacing: "0.2em",
               textTransform: "uppercase", color: "#4f7fa8", marginBottom: "8px",
@@ -407,16 +490,21 @@ export default function OurStoryPage() {
               letterSpacing: "-0.02em", color: "var(--foreground)", lineHeight: 1.1,
             }}>Meet the Team</h2>
           </div>
-          <div style={{
-            display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(260px,1fr))", gap: "24px",
-          }}>
-            {team.map((member) => (
+          <div
+            ref={teamReveal.ref}
+            style={{
+              display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(260px,1fr))", gap: "24px",
+            }}>
+            {team.map((member, i) => (
               <div key={member.name} style={{
                 padding: "32px 24px",
                 background: "var(--bg-secondary)",
                 border: "1px solid var(--surface-border)",
                 borderRadius: "10px",
-                transition: "border-color 0.25s ease",
+                opacity: teamReveal.visible ? 1 : 0,
+                filter: teamReveal.visible ? "blur(0)" : "blur(10px)",
+                transform: teamReveal.visible ? "translateY(0)" : "translateY(22px)",
+                transition: `opacity 0.6s ease ${i * 0.1}s, filter 0.6s ease ${i * 0.1}s, transform 0.6s ease ${i * 0.1}s, border-color 0.25s ease`,
               }}
                 onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.borderColor = member.color + "55"; }}
                 onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.borderColor = "var(--surface-border)"; }}
@@ -427,6 +515,7 @@ export default function OurStoryPage() {
                   display: "flex", alignItems: "center", justifyContent: "center",
                   fontSize: "0.88rem", fontWeight: 800, color: member.color,
                   marginBottom: "16px",
+                  animation: teamReveal.visible ? `orbit-in 0.6s cubic-bezier(0.34,1.56,0.64,1) ${i * 0.1 + 0.2}s both` : "none",
                 }}>{member.initials}</div>
                 <h3 style={{ fontSize: "1rem", fontWeight: 700, color: "var(--foreground)", marginBottom: "4px" }}>
                   {member.name}
@@ -448,9 +537,15 @@ export default function OurStoryPage() {
         <div style={{ maxWidth: "1200px", margin: "0 auto" }}>
           <div style={{
             display: "grid", gridTemplateColumns: "1fr 1fr",
-            border: "1px solid var(--surface-border)", borderRadius: "10px", overflow: "hidden",
+            borderRadius: "40px", overflow: "hidden",
+            boxShadow: "var(--shadow-lg)",
+            border: "1px solid rgba(255,255,255,0.06)",
           }} className="cta-grid">
-            <div style={{ padding: "52px 44px", background: "var(--surface)", borderRight: "1px solid var(--surface-border)" }}>
+            <div style={{ padding: "56px 48px",
+              background: "linear-gradient(135deg, var(--surface) 0%, rgba(181,129,61,0.04) 100%)",
+              backdropFilter: "blur(16px)",
+              WebkitBackdropFilter: "blur(16px)",
+              borderRight: "1px solid rgba(255,255,255,0.05)" }}>
               <p style={{ fontSize: "0.68rem", fontWeight: 700, letterSpacing: "0.2em", textTransform: "uppercase", color: "#b5813d", marginBottom: "16px" }}>
                 Be Part of Our Story
               </p>
@@ -462,13 +557,22 @@ export default function OurStoryPage() {
               </p>
               <div style={{ display: "flex", gap: "12px", flexWrap: "wrap" }}>
                 <Link href="/contact" style={{
-                  padding: "12px 24px", borderRadius: "8px",
-                  background: "#b5813d", color: "#fff",
+                  padding: "13px 26px", borderRadius: "100px",
+                  background: "linear-gradient(135deg, #b5813d, #c8a96e)", color: "#fff",
                   fontWeight: 700, fontSize: "0.88rem",
-                  textDecoration: "none", transition: "opacity 0.2s ease",
+                  textDecoration: "none",
+                  boxShadow: "0 4px 20px rgba(181,129,61,0.35)",
+                  transition: "transform 0.2s ease, box-shadow 0.2s ease",
+                  display: "inline-flex",
                 }}
-                  onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.opacity = "0.85"; }}
-                  onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.opacity = "1"; }}
+                  onMouseEnter={(e) => {
+                    (e.currentTarget as HTMLElement).style.transform = "translateY(-2px)";
+                    (e.currentTarget as HTMLElement).style.boxShadow = "0 8px 30px rgba(181,129,61,0.5)";
+                  }}
+                  onMouseLeave={(e) => {
+                    (e.currentTarget as HTMLElement).style.transform = "translateY(0)";
+                    (e.currentTarget as HTMLElement).style.boxShadow = "0 4px 20px rgba(181,129,61,0.35)";
+                  }}
                 >
                   Get Involved
                 </Link>
@@ -492,7 +596,7 @@ export default function OurStoryPage() {
                 </Link>
               </div>
             </div>
-            <div style={{ padding: "52px 44px", background: "var(--bg-secondary)" }}>
+            <div style={{ padding: "56px 48px", background: "var(--bg-secondary)" }}>
               <p style={{ fontSize: "0.68rem", fontWeight: 700, letterSpacing: "0.2em", textTransform: "uppercase", color: "var(--foreground-faint)", marginBottom: "20px" }}>
                 Ways to Contribute
               </p>
@@ -517,13 +621,35 @@ export default function OurStoryPage() {
       </section>
 
       <style>{`
+        @keyframes timeline-pulse {
+          0%, 100% { transform: scale(1);   opacity: 0.35; }
+          50%       { transform: scale(1.5); opacity: 0;    }
+        }
         @media (max-width: 768px) {
           .mission-grid { grid-template-columns: 1fr !important; }
           .values-grid  { grid-template-columns: repeat(2,1fr) !important; }
           .cta-grid     { grid-template-columns: 1fr !important; }
+
+          /* Timeline: left-side layout on mobile */
+          .timeline-item-grid {
+            grid-template-columns: 52px 1fr !important;
+            margin-bottom: 36px !important;
+          }
+          .timeline-left-cell { display: none !important; }
+          .timeline-center-cell { grid-column: 1 !important; }
+          .timeline-right-cell {
+            grid-column: 2 !important;
+            padding-left: 12px !important;
+            display: flex !important;
+            justify-content: flex-start !important;
+          }
+          .timeline-right-cell > * { max-width: 100% !important; width: 100% !important; }
+          /* Show mobile card for left items */
+          .mobile-timeline-card { display: block !important; width: 100%; }
         }
         @media (max-width: 480px) {
           .values-grid  { grid-template-columns: 1fr !important; }
+          .timeline-item-grid { margin-bottom: 28px !important; }
         }
       `}</style>
     </div>

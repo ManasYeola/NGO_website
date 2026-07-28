@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import { useState } from "react";
+import { useReveal } from "../components/useReveal";
 
 const galleryImages = [
   {
@@ -57,6 +58,8 @@ export default function ImagesPage() {
   const [activeCategory, setActiveCategory] = useState("All");
   const [hoveredIdx, setHoveredIdx] = useState<number | null>(null);
   const [lightbox, setLightbox] = useState<(typeof galleryImages)[0] | null>(null);
+  const galleryReveal = useReveal(0.05);
+  const ctaReveal     = useReveal(0.1);
 
   const filtered =
     activeCategory === "All"
@@ -67,11 +70,11 @@ export default function ImagesPage() {
     <div className="page-wrapper">
 
       {/* ── Header ── */}
-      <section style={{ padding: "96px 24px 60px", position: "relative", overflow: "hidden" }}>
-        <div style={{
+      <section className="page-header-section" style={{ padding: "96px 24px 60px", position: "relative", overflow: "hidden" }}>
+        <div className="page-header-rule" style={{
           position: "absolute", inset: 0, zIndex: 0,
-          backgroundImage: "repeating-linear-gradient(0deg, transparent, transparent 79px, var(--surface-border) 80px)",
-          opacity: 0.3,
+          backgroundImage: "repeating-linear-gradient(0deg, transparent, transparent 79px, var(--page-header-line) 80px)",
+          opacity: 1,
         }} />
         <div style={{
           position: "absolute", left: 0, top: 0, bottom: 0, width: 3,
@@ -135,21 +138,26 @@ export default function ImagesPage() {
       {/* ── Gallery Grid ── */}
       <section style={{ padding: "0 24px 80px" }}>
         <div style={{ maxWidth: "1200px", margin: "0 auto" }}>
-          <div style={{
-            display: "grid",
-            gridTemplateColumns: "repeat(auto-fill, minmax(340px, 1fr))",
-            gap: "16px",
-          }} className="gallery-grid">
+          <div
+            ref={galleryReveal.ref}
+            style={{
+              display: "grid",
+              gridTemplateColumns: "repeat(auto-fill, minmax(340px, 1fr))",
+              gap: "16px",
+            }} className="gallery-grid">
             {filtered.map((img, idx) => {
               const col = catColors[img.category] ?? "#b5813d";
               return (
                 <div
                   key={img.src}
                   style={{
-                    position: "relative", borderRadius: "8px", overflow: "hidden",
+                    position: "relative", borderRadius: "20px", overflow: "hidden",
                     aspectRatio: "4/3", cursor: "pointer",
-                    border: "1px solid var(--surface-border)",
-                    transition: "border-color 0.25s ease",
+                    boxShadow: "var(--shadow-sm)",
+                    opacity: galleryReveal.visible ? 1 : 0,
+                    filter: galleryReveal.visible ? "blur(0)" : "blur(8px)",
+                    transform: galleryReveal.visible ? "translateY(0) scale(1)" : "translateY(20px) scale(0.96)",
+                    transition: `opacity 0.5s ease ${idx * 0.09}s, filter 0.5s ease ${idx * 0.09}s, transform 0.5s cubic-bezier(0.23,1,0.32,1) ${idx * 0.09}s, box-shadow 0.3s ease`,
                   }}
                   onMouseEnter={() => setHoveredIdx(idx)}
                   onMouseLeave={() => setHoveredIdx(null)}
@@ -229,11 +237,24 @@ export default function ImagesPage() {
       {/* ── Bottom CTA ── */}
       <section style={{ padding: "0 24px 80px" }}>
         <div style={{ maxWidth: "1200px", margin: "0 auto" }}>
-          <div style={{
-            display: "grid", gridTemplateColumns: "1fr 1fr",
-            border: "1px solid var(--surface-border)", borderRadius: "10px", overflow: "hidden",
-          }} className="cta-grid">
-            <div style={{ padding: "48px 44px", background: "var(--surface)", borderRight: "1px solid var(--surface-border)" }}>
+          <div
+            ref={ctaReveal.ref}
+            style={{
+              display: "grid", gridTemplateColumns: "1fr 1fr",
+              borderRadius: "40px", overflow: "hidden",
+              boxShadow: "var(--shadow-lg)",
+              border: "1px solid rgba(255,255,255,0.06)",
+            }} className="cta-grid">
+            <div style={{
+              padding: "52px 48px",
+              background: "linear-gradient(135deg, var(--surface) 0%, rgba(181,129,61,0.04) 100%)",
+              backdropFilter: "blur(16px)",
+              WebkitBackdropFilter: "blur(16px)",
+              borderRight: "1px solid rgba(255,255,255,0.05)",
+              opacity: ctaReveal.visible ? 1 : 0,
+              transform: ctaReveal.visible ? "translateX(0)" : "translateX(-28px)",
+              transition: "opacity 0.6s ease, transform 0.6s cubic-bezier(0.23,1,0.32,1)",
+            }}>
               <p style={{ fontSize: "0.68rem", fontWeight: 700, letterSpacing: "0.2em", textTransform: "uppercase", color: "#b5813d", marginBottom: "14px" }}>
                 Behind the Lens
               </p>
@@ -245,18 +266,31 @@ export default function ImagesPage() {
               </p>
               <a href="/contact" style={{
                 display: "inline-flex", alignItems: "center", gap: "8px",
-                padding: "12px 24px", borderRadius: "8px",
-                background: "#b5813d", color: "#fff",
+                padding: "13px 26px", borderRadius: "100px",
+                background: "linear-gradient(135deg, #b5813d, #c8a96e)", color: "#fff",
                 fontWeight: 700, fontSize: "0.88rem",
-                textDecoration: "none", transition: "opacity 0.2s ease",
+                textDecoration: "none",
+                boxShadow: "0 4px 20px rgba(181,129,61,0.35)",
+                transition: "transform 0.2s ease, box-shadow 0.2s ease",
               }}
-                onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.opacity = "0.85"; }}
-                onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.opacity = "1"; }}
+                onMouseEnter={(e) => {
+                  (e.currentTarget as HTMLElement).style.transform = "translateY(-2px)";
+                  (e.currentTarget as HTMLElement).style.boxShadow = "0 8px 30px rgba(181,129,61,0.5)";
+                }}
+                onMouseLeave={(e) => {
+                  (e.currentTarget as HTMLElement).style.transform = "translateY(0)";
+                  (e.currentTarget as HTMLElement).style.boxShadow = "0 4px 20px rgba(181,129,61,0.35)";
+                }}
               >
                 Join Our Team
               </a>
             </div>
-            <div style={{ padding: "48px 44px", background: "var(--bg-secondary)" }}>
+            <div style={{
+              padding: "52px 48px", background: "var(--bg-secondary)",
+              opacity: ctaReveal.visible ? 1 : 0,
+              transform: ctaReveal.visible ? "translateX(0)" : "translateX(28px)",
+              transition: "opacity 0.6s ease 0.12s, transform 0.6s cubic-bezier(0.23,1,0.32,1) 0.12s",
+            }}>
               <p style={{ fontSize: "0.68rem", fontWeight: 700, letterSpacing: "0.2em", textTransform: "uppercase", color: "var(--foreground-faint)", marginBottom: "20px" }}>
                 Gallery by Numbers
               </p>
@@ -295,6 +329,7 @@ export default function ImagesPage() {
           }}
         >
           <div
+            className="lightbox-panel"
             onClick={(e) => e.stopPropagation()}
             style={{
               position: "relative", maxWidth: "860px", width: "100%",
